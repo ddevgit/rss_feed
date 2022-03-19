@@ -13,8 +13,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 //bin/console app:rss-reader
-
-
 class RssReaderCommand extends Command
 {
     protected static $defaultName = 'app:rss-reader';
@@ -45,7 +43,6 @@ class RssReaderCommand extends Command
         $feedIo = $this->feedIo;
 
         // this date is used to fetch only the latest items
-
         $date = new DateTime(); // Return Datetime object for current time
         $modifiedSince = $date->modify('-12 month');
 
