@@ -3,7 +3,8 @@
 namespace App\Command;
 
 
-use DateTime;
+use App\Entity\Feed;
+use App\Repository\FeedRepository;
 use FeedIo\FeedIo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,13 +18,14 @@ class RssReaderCommand extends Command
 {
     protected static $defaultName = 'app:rss-reader';
     private $feedIo;
+    private $feedRepository;
 
-    public function __construct(FeedIo $feedIo)
+    public function __construct(FeedIo $feedIo, FeedRepository $feedRepository)
     {
         $this->feedIo = $feedIo;
+        $this->feedRepository = $feedRepository;
 
         parent::__construct();
-
     }
 
     protected function configure(): void
@@ -39,18 +41,15 @@ class RssReaderCommand extends Command
         // the feed you want to read
         $url = 'https://minimalistbaker.com/feed/';
 
-        // now fetch its (fresh) content
-        $feedIo = $this->feedIo;
-
         // this date is used to fetch only the latest items
-        $date = new DateTime(); // Return Datetime object for current time
-        $modifiedSince = $date->modify('-12 month');
+        $feedStoreTime = new Feed();
+        $this->feedRepository->add($feedStoreTime);
+        $lasTimeFeed = $feedStoreTime->getLastTime();
 
         // now fetch its (fresh) content
-        $feed = $this->feedIo->read($url )->getFeed();
+        $feed = $this->feedIo->read($url,null , null )->getFeed();
 
         foreach ( $feed as $item ) {
-
            echo "Title:". $item->getTitle()."\n" ;
             echo $item->getLink() ."\n" ;
         }

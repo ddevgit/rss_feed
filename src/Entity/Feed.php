@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\FeedRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FeedRepository::class)]
@@ -18,7 +19,7 @@ class Feed
 
     public function __construct()
     {
-        $this->lastTime =  \DateTime('@'.strtotime('now'));
+        $this->lastTime =  new DateTime('@'.strtotime('now'));
     }
 
     public function getId(): ?int
